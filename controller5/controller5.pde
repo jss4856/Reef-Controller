@@ -170,56 +170,7 @@ void noon()
     
     delay(600000); //10mins sunny
 }
-else if  (randNumber = 2) //10% chance of cloud pattern... 
-   
- { 
-  lcd.setCursor(7,1); 
-  lcd.print("Stormy ");  
-    
-    for(int fadeValue = 255 ; fadeValue >= 20; fadeValue -=1) {
-    analogWrite(mainlights, fadeValue);          
-    delay(1000); } 
-   
-    delay(300000);//5mins
-    analogWrite(mainlights,255);
-    delay(500);
-    analogWrite(mainlights,100);
-    delay(500);
-    analogWrite(mainlights,20
-    delay(120000);//2mins
-    
-    analogWrite(mainlights,255);
-    delay(500);
-    analogWrite(mainlights,20);
-    delay(1000);
-    analogWrite(mainlights,255);
-    delay(500);
-    analogWrite(mainlights,20);    
-    delay(10000)//10 secs
-    
-    analogWrite(mainlights,255);
-    delay(500);
-    analogWrite(mainlights,20);
-    delay(500);
-    analogWrite(mainlights,100);
-    delay(500);
-    analogWrite(mainlights,20);    
-    delay(300000) //5 mins
-    
-    analogWrite(mainlights,255);
-    delay(500);
-    analogWrite(mainlights,20);
-    delay(500);
-    analogWrite(mainlights,100);
-    delay(500);
-    analogWrite(mainlights,20);    
-    delay(300000)//
-    
-   
-    for(int fadeValue = 20 ; fadeValue <= 255; fadeValue +=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(1000);} 
-}  
+  
    
 }   
    
