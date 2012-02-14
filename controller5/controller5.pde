@@ -128,36 +128,98 @@ void noon()
   digitalWrite(ledmatrix,HIGH); 
    
   //weather patterns would go here 
-  //if (randNumber = 1) //10% chance of cloud pattern... 
+   if (randNumber = 1) //10% chance of cloud pattern... 
    
-  /*
+ { 
   lcd.setCursor(7,1); 
   lcd.print("Cloudy ");  
+    
+    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {
+    analogWrite(mainlights, fadeValue);          
+    delay(40); } 
+   
+    delay(30000); //30secs cloud
+   
     for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
     analogWrite(mainlights, fadeValue);          
     delay(40);} 
-    delay(10000); 
+   
+    delay(120000); //2mins sunny
+   
     for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
     analogWrite(mainlights, fadeValue);          
     delay(40); } 
-    delay(120000); 
+   
+    delay(45000); //45secs cloudy 
+   
     for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
     analogWrite(mainlights, fadeValue);          
     delay(40);} 
-    delay(20000); 
+   
+    delay(60000); //1mins sunny
+   
     for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
     analogWrite(mainlights, fadeValue);          
-    delay(40); } 
-    delay(300000); 
+    delay(40); }
+    
+    delay(300000); //5mins cloudy 
+   
     for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
     analogWrite(mainlights, fadeValue);          
     delay(40);} 
-    delay(5000); 
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
+    
+    delay(600000); //10mins sunny
+}
+else if  (randNumber = 2) //10% chance of cloud pattern... 
+   
+ { 
+  lcd.setCursor(7,1); 
+  lcd.print("Stormy ");  
+    
+    for(int fadeValue = 255 ; fadeValue >= 20; fadeValue -=1) {
     analogWrite(mainlights, fadeValue);          
-    delay(40); } 
-    delay(600000); 
-  */   
+    delay(1000); } 
+   
+    delay(300000);//5mins
+    analogWrite(mainlights,255);
+    delay(500);
+    analogWrite(mainlights,100);
+    delay(500);
+    analogWrite(mainlights,20
+    delay(120000);//2mins
+    
+    analogWrite(mainlights,255);
+    delay(500);
+    analogWrite(mainlights,20);
+    delay(1000);
+    analogWrite(mainlights,255);
+    delay(500);
+    analogWrite(mainlights,20);    
+    delay(10000)//10 secs
+    
+    analogWrite(mainlights,255);
+    delay(500);
+    analogWrite(mainlights,20);
+    delay(500);
+    analogWrite(mainlights,100);
+    delay(500);
+    analogWrite(mainlights,20);    
+    delay(300000) //5 mins
+    
+    analogWrite(mainlights,255);
+    delay(500);
+    analogWrite(mainlights,20);
+    delay(500);
+    analogWrite(mainlights,100);
+    delay(500);
+    analogWrite(mainlights,20);    
+    delay(300000)//
+    
+   
+    for(int fadeValue = 20 ; fadeValue <= 255; fadeValue +=1) {  
+    analogWrite(mainlights, fadeValue);          
+    delay(1000);} 
+}  
    
 }   
    
