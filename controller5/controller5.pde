@@ -69,10 +69,10 @@ int refugium = 2;
 int mainlights = 3;    // LED connected to digital pin 3 
 int fadetime = (/*minutes to fade here-> */((60)/*<-minutes to fade*/*60000)/255); 
 
-
 //////////////////////////////// 
-//weather patterns 
+//weather patterns random number
 long randNumber; 
+long randDelay;
 
 
 
@@ -123,52 +123,75 @@ void noon()
 { 
   lcd.setCursor(7,1); 
   lcd.print("Sunny  "); 
- // randNumber = random(1,10); 
+  randNumber = random(1,2); //50% chance of weather
   digitalWrite(refugium,LOW); 
   digitalWrite(ledmatrix,HIGH); 
+  randDelay = random(30000,28800000) //random delay of between 30sec and 8 hrs. for storm
    
-  //weather patterns would go here 
-   if (randNumber = 1) //10% chance of cloud pattern... 
+//start of weather patterns
+   if (randNumber = 2)
    
  { 
+  delay(randDelay);
+  
   lcd.setCursor(7,1); 
-  lcd.print("Cloudy ");  
+  lcd.print("Cloudy "); 
     
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {
+    digitalWrite(ledmatrix,LOW);
+    for(int fadeValue = 255 ; fadeValue >= 100; fadeValue -=1) {  
     analogWrite(mainlights, fadeValue);          
-    delay(40); } 
+    delay(4000); } //100% to ~50% sunshine over 10 minutes
    
-    delay(30000); //30secs cloud
+    delay(3600000); //1 hour cloud
    
-    for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
+      lcd.setCursor(7,1); 
+      lcd.print("Stormy "); 
+    for(int fadeValue = 100 ; fadeValue >= 30; fadeValue -=1) {  
     analogWrite(mainlights, fadeValue);          
-    delay(40);} 
+    delay(8500); }  //~50% sunshine to minimum sunshine over 10 mins
+  
+        //start of lightning-----------------
+        analogWrite(mainlights, 255);
+            delay(500); 
+        analogWrite(mainlights, 30);
+            delay(5000);      //5sec
+        analogWrite(mainlights, 200);
+            delay(500);             
+          analogWrite(mainlights, 30);
+            delay(500);    
+          analogWrite(mainlights, 100);
+            delay(500);             
+             analogWrite(mainlights, 30);
+            delay(600000); //10 mins
+            
+             analogWrite(mainlights, 255);
+            delay(500); 
+        analogWrite(mainlights, 30);
+            delay(5000);      //5sec
+        analogWrite(mainlights, 200);
+            delay(500);             
+          analogWrite(mainlights, 30);
+            delay(500);    
+          analogWrite(mainlights, 100);
+            delay(500);             
+             analogWrite(mainlights, 30);
+            delay(600000); //10 mins
+            
+        //end of lightning--------------
    
-    delay(120000); //2mins sunny
-   
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
+   for(int fadeValue = 30 ; fadeValue <= 100; fadeValue +=1) {  
     analogWrite(mainlights, fadeValue);          
-    delay(40); } 
-   
-    delay(45000); //45secs cloudy 
-   
-    for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40);} 
-   
-    delay(60000); //1mins sunny
-   
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40); }
+    delay(8500);} // fade in min to 50% sun 10 mins 
+     lcd.setCursor(7,1); 
+      lcd.print("Cloudy "); 
     
-    delay(300000); //5mins cloudy 
+        delay(3600000); //1 hour cloudy
    
-    for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
+    for(int fadeValue = 100 ; fadeValue <= 255; fadeValue +=1) {  
     analogWrite(mainlights, fadeValue);          
-    delay(40);} 
+    delay(4000);} //10 minutes fade from ~50% to 100% sun 
     
-    delay(600000); //10mins sunny
+
 }
   
    
@@ -221,7 +244,7 @@ void setup()
   ///////////Lighting cycle 
   Alarm.alarmRepeat(8,30,00,sunrise); 
   Alarm.alarmRepeat(9,30,00,noon); 
-  Alarm.alarmRepeat(8,30,00,sunset); 
+  Alarm.alarmRepeat(19,30,00,sunset);//starts @ 7:30, sun down at 8:30 for 12 hours total 
 
 
 } 
