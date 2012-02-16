@@ -129,7 +129,7 @@ void noon()
   randDelay = random(30000,28800000) //random delay of between 30sec and 8 hrs. for storm
    
 //start of weather patterns
-   if (randNumber = 2)
+   if (randNumber = 2);
    
  { 
   delay(randDelay);
@@ -189,8 +189,8 @@ void noon()
    
     for(int fadeValue = 100 ; fadeValue <= 255; fadeValue +=1) {  
     analogWrite(mainlights, fadeValue);          
-    delay(4000);} //10 minutes fade from ~50% to 100% sun 
-    
+    delay(4000);}//10 minutes fade from ~50% to 100% sun 
+    digitalWrite(ledmatrix,HIGH);
 
 }
   
