@@ -206,7 +206,7 @@ void setup()
   ///////////Lighting cycle 
   Alarm.alarmRepeat(8,30,00,sunrise); 
   Alarm.alarmRepeat(9,30,00,noon); 
-  Alarm.alarmRepeat(8,30,00,sunset); 
+  Alarm.alarmRepeat(19,30,00,sunset); 
 
 
 } 
