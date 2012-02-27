@@ -121,41 +121,9 @@ void noon()
 { 
   lcd.setCursor(7,1); 
   lcd.print("Sunny  "); 
- // randNumber = random(1,10); 
   digitalWrite(refugium,LOW); 
   digitalWrite(ledmatrix,HIGH); 
-   
-  //weather patterns would go here 
-  //if (randNumber = 1) //10% chance of cloud pattern... 
-   
-  /*
-  lcd.setCursor(7,1); 
-  lcd.print("Cloudy ");  
-    for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40);} 
-    delay(10000); 
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40); } 
-    delay(120000); 
-    for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40);} 
-    delay(20000); 
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40); } 
-    delay(300000); 
-    for(int fadeValue = 30 ; fadeValue <= 255; fadeValue +=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40);} 
-    delay(5000); 
-    for(int fadeValue = 255 ; fadeValue >= 30; fadeValue -=1) {  
-    analogWrite(mainlights, fadeValue);          
-    delay(40); } 
-    delay(600000); 
-  */   
+    
    
 }   
    
