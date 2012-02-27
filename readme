@@ -1,3 +1,2 @@
-The 'Master' branch is designed to be (and currently running) as a bulletpoof system. No LCD issues, consistent time
-and temp readouts.
-There is no '0' in front of single time units, ie. 12:07 reads as 12:7. Time is in 24h format.
+The 'Master' branch is designed to be a no frills highly stable controller. A good power conditioner will keep random
+characters off the blank space on the LCD
