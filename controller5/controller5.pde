@@ -109,7 +109,9 @@ void sunrise()
   digitalWrite(refugium,LOW); 
    
     // fade in from min to max in increments of 1 points: 
-    for(int fadeValue = 0 ; fadeValue <= 255; fadeValue +=1) {  
+    //starting at 20 with the meanwell eln-p driver gives a nice moon light effect.
+    //values below 26 don't process correctly with this driver?
+    for(int fadeValue = 20 ; fadeValue <= 255; fadeValue +=1) {  
     // sets the value (range from 0 to 255): 
     analogWrite(mainlights, fadeValue);          
     delay(fadetime); 
@@ -138,7 +140,7 @@ void sunset()
   digitalWrite(ledmatrix,LOW); 
    
     // fade out from max to min in increments of 1 points: 
-    for(int fadeValue = 255 ; fadeValue >= 0; fadeValue -=1) {  
+    for(int fadeValue = 255 ; fadeValue >= 20; fadeValue -=1) {  
     // sets the value (range from 0 to 255): 
     analogWrite(mainlights, fadeValue);          
     delay(fadetime);   
