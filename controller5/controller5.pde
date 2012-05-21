@@ -257,3 +257,40 @@ void  loop()
   temperature(); 
   wavemaker(); 
 }  
+
+
+
+/* POSSIBLE WAVEMAKER ADDITION BELOW ATTEMPTS TO WORK WITH SSR AND DIFFERENT Hz
+
+int wavebox = 6; //#6 pin
+int period_in_ms = 1000; //can be higher but not lower than 1000.
+
+void setup()
+{
+  
+}
+
+void wavemaker ()
+{
+ int wavehz = 1;
+  int wavefrequency = (period_in_ms/(2^wavehz)); 
+  if (wavefrequency = (period_in_ms/2)) 
+       for(int wavehz = 1 ; wavehz <= 5; wavehz +=1) {  
+      // increases the value (range from 2 to 5): 
+      analogWrite(wavebox, wavefrequency);          
+      delay(period_in_ms); 
+    if (wavefrequency = (period_in_ms/32))
+       for(int wavehz = 1 ; wavehz <= 5; wavehz -=1) {  
+      // decreases the value (range from 5 to 2): 
+      analogWrite(wavebox, wavefrequency);          
+      delay(period_in_ms); 
+
+  } 
+}
+
+}
+
+void loop()
+{
+  wavemaker ();
+}
