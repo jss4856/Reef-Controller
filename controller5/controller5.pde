@@ -1,33 +1,13 @@
-/*
-//brown A0 - FAN
-//green 2 - LEDGDRID
-//yellow A3 - HEATER
-//orange 4 - Pump???
-LIGHTS DIMMED TO 200 out of 255
-
-*/
-
-//INFO - Powerhead relays are pins 4, and 2
-//TEMP INPUT WILL BE ON PIN 6 PWM
-//BLUE LEDs on pin 3
-//WHITE LEDs on pin 5 PWM PINSSSS
-//SET DATE THEN REMOVE SET DATE CALL
-//FAN ON A0
-
 
 #include "Wire.h" 
 #define DS1307_I2C_ADDRESS 0x68 //set rtc
-#include <LiquidCrystal.h> // initialize the library with the numbers of the interface pins
 #include <OneWire.h>
 //INCLUDES##################################################################################### 
 
-#include <LiquidCrystal.h> 
 #include <DallasTemperature.h> 
 #define ONE_WIRE_BUS 6 //Define the pin of the DS18B20 
 
 
-/*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  T E M P   P I N  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
-//OneWire ds(6);
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  T E M P   P I N  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 OneWire oneWire(ONE_WIRE_BUS); 
 DallasTemperature sensors(&oneWire); 
@@ -46,18 +26,18 @@ const int ledPin2 =  2;          // pin number for relay 2
 // TEMP CONTROL
 int fan = 4;
 int heat = 13; //HEAT IS ACTUALLY pin 4????!!!
-int ledgrid = 116;
-int toohot = 81; // Too difficult to maintain exact temp?....
-int toocold = 80;
+int ledgrid = 5;
+int toohot = 82; // raised from 80-81
+int toocold = 81.5;
 // FAN CONTROL
 
 
 int ledState1 = LOW;             
-int ledState2 = LOW; 
+int ledState2 = HIGH; 
 long previousMillis1 = 0;        
 long previousMillis2 = 0;
-long interval1 = 43200000;          // interval ,at which to blink (milliseconds) for RELAY1
-long interval2 = 43200000;  	 // interval at which to blink (milliseconds) for RELAY2
+long interval1 = 14400000;          // interval ,at which to blink (milliseconds) for RELAY1
+long interval2 = 28800000;     // interval at which to blink (milliseconds) for RELAY2
 
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L E D   D I M M I N G   P A R T  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
@@ -65,23 +45,21 @@ long interval2 = 43200000;  	 // interval at which to blink (milliseconds) for R
 
 
 
-int blueramptime = 30 ;    // time for blue LEDs to dim on and off in minutes
-int whiteramptime = 30 ;  // time for white LEDs to dim on and off in minutes
+int blueramptime = 15 ;    // time for blue LEDs to dim on and off in minutes
+int whiteramptime = 15 ;  // time for white LEDs to dim on and off in minutes
 int bluemin = 0 ;          // minimmum dimming value of blue LEDs, range of 0-255
-int bluemax = 255 ;        // maximum dimming value of blue LEDs, range of 0-255
+int bluemax = 150 ;        // maximum dimming value of blue LEDs, range of 0-255
 int whitemin = 0 ;         // minimum dimming value of white LEDs, range of 0-255
-int whitemax = 255 ;       // maximum dimming value of white LEDs, range of 0-255
-int photoperiod = 570 ;    // amount of time array is on at full power in minutes
-int ontime = 10 ;          // time of day (hour, 24h clock) to begin photoperiod fade in
+int whitemax = 150 ;       // maximum dimming value of white LEDs, range of 0-255
+int photoperiod = 540 ;    // amount of time array is on at full power in minutes
+int ontime = 9 ;          // time of day (hour, 24h clock) to begin photoperiod fade in
 int blue = 3;              // blue LEDs connected to digital pin 3 (pwm)
-int white = 5;            // white LEDs connected to digital pin 11 (pwm)
+int white = -200;            // white LEDs connected to digital pin 11 (pwm)
 int ledfan = 111;        //this fan is for cooling the LEDs
 
-//int bluepercent[11] = { 0, 1, 2, 5, 8 ,12, 18, 27, 44, 80, 255 };   // this line is needed if you are using meanwell ELN60-48D
-//int whitepercent[11] = { 0, 1, 2, 5, 8 ,12, 18, 27, 44, 80, 255 };   // these are the values in 10% increments
 
-int bluepercent[11] = { 0, 26, 52, 78, 103, 128, 154, 180, 200, 225, 255 };   // this line is needed if you are using meanwell ELN60-48P
-int whitepercent[11] = { 0, 26, 52, 78, 103, 128, 154, 180, 200, 225, 255 };   // these are the values in 10% increments
+int bluepercent[11] = { 0, 35, 65, 90, 107, 120, 129, 137, 143, 146, 149 };   // this line is needed if you are using meanwell ELN60-48P
+int whitepercent[11] = { 0, 35, 65, 90, 107, 120, 129, 137, 143, 146, 149 };   // these values are based on the curve of a circle with bluemax being radius
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);   // LCD ASSIGNMENT moved from 11 to 13 change this on chip.
 
@@ -189,7 +167,7 @@ void onesecond() //function that runs once per second while program is running
     lcd.print("pm");
   }
   lcd.print(" ");
-  delay(1000);
+  delay(1500);
 }
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  D E F I N E  :  L E D  G R I D  O N |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
@@ -271,11 +249,12 @@ void relay2()
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  S E T U P  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 
 void setup() {
-  pinMode(ledPin1, OUTPUT);    // set the digital pin as output:
-  pinMode(ledPin2, OUTPUT);    // set the digital pin as output:
+  pinMode(ledPin1, OUTPUT);
+  //pinMode(ledPin2, OUTPUT); 
   pinMode(heat, OUTPUT);
   pinMode(fan, OUTPUT);
-  
+  digitalWrite(heat, HIGH); //if mechanical relays start LOW when the arduino boots the devices will all turn on
+  digitalWrite(fan, HIGH);
   
   
   
@@ -313,15 +292,19 @@ void setup() {
 void temperature() 
 { 
   sensors.requestTemperatures(); // Send the command to get temperatures 
-  delay(1000); 
+  delay(1500); 
   float temp2=0; 
   lcd.setCursor(14, 0); 
   temp2= sensors.getTempFByIndex(0); 
   lcd.print(sensors.getTempFByIndex(0));  
   lcd.print((char)223); 
 
-  if(temp2>toohot) return fanon(),heatoff(); 
-  if(temp2<toocold) return heaton(),fanoff(); 
+  if(temp2>toohot) return fanon(),heatoff(); //these work, but cause a constant state of either relay being ON
+  if(temp2<toocold) return heaton(),fanoff();
+  
+  //if (temp2>toohot) fanon(); else fanoff(); //try this! 6/29/2012
+  //if (temp2<toocold) heaton(); else heatoff();
+
 } 
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L O O P |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
@@ -330,8 +313,8 @@ void loop()
 {
   temperature();
   onesecond();
-  relay2();
-  relay1();
+ // relay2();
+ // relay1();
 
 
  
@@ -394,9 +377,9 @@ void loop()
           {
           onesecond(); // updates clock once per second
           countdown--;
-          
-          relay2();
+          temperature();
           relay1();
+          ledgridoff();     
 
 
         }
@@ -416,6 +399,8 @@ void loop()
         {
           onesecond(); // updates clock once per second
           countdown--;
+          temperature();
+          ledgridoff();     
         
         }
       } 
@@ -428,17 +413,16 @@ void loop()
   { 
     if ( daybyminute < ((ontime * 60) + blueramptime + whiteramptime + photoperiod)) // if time is in range of photoperiod, turn lights on to maximum fade value
     {
-      analogWrite(blue, 255);
+      analogWrite(blue, 150);
         lcd.setCursor(5, 1);
         lcd.print(10);
         lcd.print(" ");
-      analogWrite(white, 255); 
-      //digitalWrite(ledgrid, HIGH);
+      analogWrite(white, 150); 
       lcd.setCursor(14, 1);
         lcd.print(10);
         lcd.print(" "); 
-
-      
+        relay1(); 
+         ledgridon();     
         
       
     }
@@ -454,7 +438,7 @@ void loop()
       // fade white LEDs out from max to min in increments of 1 point:
       for (int i = 10; i >= 0; i--) // setting i value for 10% increment. Start with 10%
       { 
-        analogWrite(blue, 255);
+        analogWrite(blue, 150);
         lcd.setCursor(5, 1);
         lcd.print(10);
         lcd.print(" "); 
@@ -471,8 +455,9 @@ void loop()
         {
           onesecond(); // updates clock once per second
           countdown--;
-          relay2();
           relay1();
+          temperature();
+          ledgridoff();     
  
 
         }
@@ -492,26 +477,14 @@ void loop()
         {
           onesecond(); // updates clock once per second
           countdown--;
-          relay2();
           relay1();
-
-
+          temperature();
+          ledgridoff();     
         }
       }
 
     }
   }
  
-
-
- 
- //if (daybyminute > fan_on_time*60) return fanon();
- //if (daybyminute > (fan_on_time*60 + photoperiod + whiteramptime)) return fanoff();
- 
- 
- 
- // Fancontrol for LED Fan
- 
-
 
 }  // END LOOP
