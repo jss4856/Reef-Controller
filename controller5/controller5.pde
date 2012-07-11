@@ -65,12 +65,12 @@ long interval2 = 43200000;  	 // interval at which to blink (milliseconds) for R
 
 
 
-int blueramptime = 30 ;    // time for blue LEDs to dim on and off in minutes
-int whiteramptime = 30 ;  // time for white LEDs to dim on and off in minutes
+int blueramptime = 15 ;    // time for blue LEDs to dim on and off in minutes
+int whiteramptime = 15 ;  // time for white LEDs to dim on and off in minutes
 int bluemin = 0 ;          // minimmum dimming value of blue LEDs, range of 0-255
-int bluemax = 255 ;        // maximum dimming value of blue LEDs, range of 0-255
+int bluemax = 150 ;        // maximum dimming value of blue LEDs, range of 0-255
 int whitemin = 0 ;         // minimum dimming value of white LEDs, range of 0-255
-int whitemax = 255 ;       // maximum dimming value of white LEDs, range of 0-255
+int whitemax = 150 ;       // maximum dimming value of white LEDs, range of 0-255
 int photoperiod = 570 ;    // amount of time array is on at full power in minutes
 int ontime = 10 ;          // time of day (hour, 24h clock) to begin photoperiod fade in
 int blue = 3;              // blue LEDs connected to digital pin 3 (pwm)
