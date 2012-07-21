@@ -40,12 +40,12 @@ OneWire ds(6);
 
 
 
-const int ledPin1 =  A1;          // pin number for relay 1
-const int ledPin2 =  2;          // pin number for relay 2
+const int ledPin1 =  -100;          // pin number for relay 1
+const int ledPin2 =  -101;          // pin number for relay 2
 
 // TEMP CONTROL
 int fan = 4;
-int heat = 13;
+int heat = 2;
 int ledgrid = 116;
 int toocold = 81; // Too difficult to maintain exact temp?....
 int toohot = 82;
