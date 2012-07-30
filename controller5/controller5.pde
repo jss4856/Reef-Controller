@@ -39,6 +39,9 @@ OneWire ds(6);
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  S I M P L E   O N   A N D   O F F   F E A T U R E |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 
 
+const int floatswitch = A3;
+int floatstate = 0;
+const int topoffpump = A1;
 
 const int ledPin1 =  -100;          // pin number for relay 1
 const int ledPin2 =  -101;          // pin number for relay 2
@@ -49,6 +52,8 @@ int heat = 2;
 int ledgrid = 116;
 int toocold = 81; // Too difficult to maintain exact temp?....
 int toohot = 82;
+int idealtemp = 81;
+int tempswing = 2;
 // FAN CONTROL
 
 
@@ -57,7 +62,7 @@ int ledState2 = LOW;
 long previousMillis1 = 0;        
 long previousMillis2 = 0;
 long interval1 = 43200000;          // interval ,at which to blink (milliseconds) for RELAY1
-long interval2 = 43200000;  	 // interval at which to blink (milliseconds) for RELAY2
+long interval2 = 43200000;     // interval at which to blink (milliseconds) for RELAY2
 
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L E D   D I M M I N G   P A R T  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
@@ -65,8 +70,8 @@ long interval2 = 43200000;  	 // interval at which to blink (milliseconds) for R
 
 
 
-int blueramptime = 15 ;    // time for blue LEDs to dim on and off in minutes
-int whiteramptime = 15 ;  // time for white LEDs to dim on and off in minutes
+int blueramptime = 20 ;    // time for blue LEDs to dim on and off in minutes
+int whiteramptime = 20 ;  // time for white LEDs to dim on and off in minutes
 int bluemin = 0 ;          // minimmum dimming value of blue LEDs, range of 0-255
 int bluemax = 150 ;        // maximum dimming value of blue LEDs, range of 0-255
 int whitemin = 0 ;         // minimum dimming value of white LEDs, range of 0-255
@@ -275,7 +280,9 @@ void setup() {
   pinMode(fan, OUTPUT);
   digitalWrite(heat, HIGH); //if mechanical relays start LOW when the arduino boots the devices will all turn on
   digitalWrite(fan, HIGH);     // Set analog pin 1 as a output
- // pinMode(ledgrid, OUTPUT);
+  pinMode(floatswitch, INPUT);
+  pinMode(topoffpump, OUTPUT);
+  digitalWrite(topoffpump, HIGH);
   /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  S E T U P - D I S P L A Y |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 
   byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
@@ -319,15 +326,34 @@ void temperature()
   if(temp2<toocold) return heaton(),fanoff();
 
 
-//if (temp2 > toohot){fanon();}  
-  //else {fanoff();}
-  
-//if (temp2<toocold){heaton();}
- // else {heatoff();}
+ /* if (temp2<(idealtemp+tempswing) && temp2>(idealtemp-tempswing))          //turn off cooler/heater
+      {
+       digitalWrite(heat, LOW);
+       digitalWrite(fan, LOW);   
+       }
+  if (tempswing>0)
+    {
+    if (temp2 >=(idealtemp+tempswing))                           //turn on cooler
+     {
+      digitalWrite(fan, HIGH);
+      }
+    if (temp2<=(idealtemp-tempswing))                          //turn an heater
+     {
+      digitalWrite(heat, HIGH);
+      }
+    }
     
 
-} 
+} */
+}
 
+void topoff()
+{
+  floatstate = digitalRead(floatswitch);
+  if (floatstate == HIGH){digitalWrite(topoffpump, LOW);}
+    else{digitalWrite(topoffpump,HIGH);}
+  delay (1000);
+}
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L O O P |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 
@@ -338,6 +364,7 @@ void loop()
   relay2();
   relay1();
             temperature();
+            topoff();
 
 
  
@@ -512,12 +539,6 @@ void loop()
     }
   }
  
-
-
-
- 
- //if (daybyminute > fan_on_time*60) return fanon();
- //if (daybyminute > (fan_on_time*60 + photoperiod + whiteramptime)) return fanoff();
  
  
  
