@@ -73,7 +73,7 @@ long interval2 = 43200000;     // interval at which to blink (milliseconds) for 
 int blueramptime = 20 ;    // time for blue LEDs to dim on and off in minutes
 int whiteramptime = 20 ;  // time for white LEDs to dim on and off in minutes
 int bluemin = 0 ;          // minimmum dimming value of blue LEDs, range of 0-255
-int bluemax = 150 ;        // maximum dimming value of blue LEDs, range of 0-255
+int bluemax = 255 ;        // maximum dimming value of blue LEDs, range of 0-255
 int whitemin = 0 ;         // minimum dimming value of white LEDs, range of 0-255
 int whitemax = 150 ;       // maximum dimming value of white LEDs, range of 0-255
 int photoperiod = 570 ;    // amount of time array is on at full power in minutes
@@ -82,11 +82,11 @@ int blue = 3;              // blue LEDs connected to digital pin 3 (pwm)
 int white = 5;            // white LEDs connected to digital pin 11 (pwm)
 int ledfan = 111;        //this fan is for cooling the LEDs
 
-//int bluepercent[11] = { 0, 1, 2, 5, 8 ,12, 18, 27, 44, 80, 255 };   // this line is needed if you are using meanwell ELN60-48D
-//int whitepercent[11] = { 0, 1, 2, 5, 8 ,12, 18, 27, 44, 80, 255 };   // these are the values in 10% increments
+int bluepercent[11] = { 0, 50, 75, 100, 125 ,150, 175, 200, 225, 250, 255 };   // this line is needed if you are using meanwell ELN60-48D
+int whitepercent[11] = { 0, 1, 2, 5, 8 ,12, 18, 27, 44, 80, 255 };   // these are the values in 10% increments
 
-int bluepercent[11] = { 0, 35, 65, 90, 107, 120, 129, 137, 143, 146, 149 };   // this line is needed if you are using meanwell ELN60-48P
-int whitepercent[11] = { 0, 35, 65, 90, 107, 120, 129, 137, 143, 146, 149 };   // these are the values in 10% increments
+//int bluepercent[11] = { 0,, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180 };   // this line is needed if you are using meanwell ELN60-48P
+//int whitepercent[11] = { 0, 35, 65, 90, 107, 120, 129, 137, 143, 146, 149 };   // these are the values in 10% increments
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);   // LCD ASSIGNMENT moved from 11 to 13 change this on chip.
 
