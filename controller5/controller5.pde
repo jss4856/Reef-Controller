@@ -1,18 +1,3 @@
-/*
-//brown A0 - FAN
-//green 2 - LEDGDRID
-//yellow A3 - HEATER
-//orange 4 - Pump???
-LIGHTS DIMMED TO 200 out of 255
-
-*/
-
-//INFO - Powerhead relays are pins 4, and 2
-//TEMP INPUT WILL BE ON PIN 6 PWM
-//BLUE LEDs on pin 3
-//WHITE LEDs on pin 5 PWM PINSSSS
-//SET DATE THEN REMOVE SET DATE CALL
-//FAN ON A0
 #include <LiquidCrystal.h>
 #include "Wire.h" 
 #define DS1307_I2C_ADDRESS 0x68 //set rtc
