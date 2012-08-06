@@ -1,18 +1,3 @@
-/*
-//brown A0 - FAN
-//green 2 - LEDGDRID
-//yellow A3 - HEATER
-//orange 4 - Pump???
-LIGHTS DIMMED TO 200 out of 255
-
-*/
-
-//INFO - Powerhead relays are pins 4, and 2
-//TEMP INPUT WILL BE ON PIN 6 PWM
-//BLUE LEDs on pin 3
-//WHITE LEDs on pin 5 PWM PINSSSS
-//SET DATE THEN REMOVE SET DATE CALL
-//FAN ON A0
 #include <LiquidCrystal.h>
 #include "Wire.h" 
 #define DS1307_I2C_ADDRESS 0x68 //set rtc
@@ -36,21 +21,19 @@ OneWire ds(6);
 
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  R E L A Y   P A R T  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
-/*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  S I M P L E   O N   A N D   O F F   F E A T U R E |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
-
 
 const int floatswitch = A3;
 int floatstate = 0;
 const int topoffpump = A1;
 
-const int ledPin1 =  -100;          // pin number for relay 1
-const int ledPin2 =  -101;          // pin number for relay 2
+const int ledPin1 =  -100;          // pin number for relay 1 ***RETIRED via separate 555 circuit
+const int ledPin2 =  -101;          // pin number for relay 2 ***RETIRED via separate 555 circuit
 
 // TEMP CONTROL
 int fan = 4;
 int heat = 2;
-int ledgrid = 116;
-int toocold = 81; // Too difficult to maintain exact temp?....
+int ledgrid = 116; //RETIRED***
+int toocold = 81;
 int toohot = 82;
 int idealtemp = 81;
 int tempswing = 2;
@@ -61,8 +44,8 @@ int ledState1 = LOW;
 int ledState2 = LOW; 
 long previousMillis1 = 0;        
 long previousMillis2 = 0;
-long interval1 = 43200000;          // interval ,at which to blink (milliseconds) for RELAY1
-long interval2 = 43200000;     // interval at which to blink (milliseconds) for RELAY2
+long interval1 = 43200000;          // interval ,at which to blink (milliseconds) for RELAY1 ***RETIRED
+long interval2 = 43200000;     // interval at which to blink (milliseconds) for RELAY2 ***RETIRED
 
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L E D   D I M M I N G   P A R T  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
@@ -70,7 +53,7 @@ long interval2 = 43200000;     // interval at which to blink (milliseconds) for 
 
 
 
-int blueramptime = 10 ;    // time for blue LEDs to dim on and off in minutes
+int blueramptime = 10 ;    // time for blue LEDs to dim on and off in minutes ***THIS is multiplied to be longer (somehow?) by temperature(); and topoff();
 int whiteramptime = 10 ;  // time for white LEDs to dim on and off in minutes
 int bluemin = 0 ;          // minimmum dimming value of blue LEDs, range of 0-255
 int bluemax = 255 ;        // maximum dimming value of blue LEDs, range of 0-255
@@ -79,26 +62,24 @@ int whitemax = 255 ;       // maximum dimming value of white LEDs, range of 0-25
 int photoperiod = 570 ;    // amount of time array is on at full power in minutes
 int ontime = 10 ;          // time of day (hour, 24h clock) to begin photoperiod fade in
 int blue = 3;              // blue LEDs connected to digital pin 3 (pwm)
-int white = 5;            // white LEDs connected to digital pin 11 (pwm)
-int ledfan = 111;        //this fan is for cooling the LEDs
+int white = 5;            // white LEDs connected to digital pin 5 (pwm)
+int ledfan = 111;        //this fan is for cooling the LEDs ***RETIRED
 
-int bluepercent[11] = { 0, 50, 75, 100, 125 ,150, 175, 200, 225, 250, 255 };   // this line is needed if you are using meanwell ELN60-48D
-int whitepercent[11] = { 0, 50, 75, 100, 125 ,150, 175, 200, 225, 250, 255 };   // these are the values in 10% increments
+int bluepercent[11] = { 0, 50, 75, 100, 125 ,150, 175, 200, 225, 250, 255 };   // this line is needed if you are using meanwell ELN60-48P
+int whitepercent[11] = { 0, 50, 75, 100, 125 ,150, 175, 200, 225, 250, 255 };   // these are the values in ~10% increments does not responde to <28
 
-//int bluepercent[11] = { 0,, 18, 36, 54, 72, 90, 108, 126, 144, 162, 180 };   // this line is needed if you are using meanwell ELN60-48P
-//int whitepercent[11] = { 0, 35, 65, 90, 107, 120, 129, 137, 143, 146, 149 };   // these are the values in 10% increments
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);   // LCD ASSIGNMENT moved from 11 to 13 change this on chip.
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  R T C   C L O C K   D S 1 3 0 7  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 
-byte decToBcd(byte val)    // Convert normal decimal numbers to binary coded decimal
+byte decToBcd(byte val)   
 
 {
   return ( (val/10*16) + (val%10) );
 }
 
-byte bcdToDec(byte val)    // Convert binary coded decimal to normal decimal numbers
+byte bcdToDec(byte val)  
 {
   return ( (val/16*10) + (val%16) );
 }
@@ -119,8 +100,7 @@ byte year) // 0-99
   Wire.send(0);
   Wire.send(decToBcd(second)); // 0 to bit 7 starts the clock
   Wire.send(decToBcd(minute));
-  Wire.send(decToBcd(hour));   // If you want 12 hour am/pm you need to set
-  // bit 6 (also need to change readDateDs1307)
+  Wire.send(decToBcd(hour));  
   Wire.send(decToBcd(dayOfWeek));
   Wire.send(decToBcd(dayOfMonth));
   Wire.send(decToBcd(month));
@@ -128,7 +108,6 @@ byte year) // 0-99
   Wire.endTransmission();
 }
 
-// Gets the date and time from the ds1307
 void getDateDs1307(byte *second,
 byte *minute,
 byte *hour,
@@ -137,14 +116,12 @@ byte *dayOfMonth,
 byte *month,
 byte *year)
 {
-  // Reset the register pointer
   Wire.beginTransmission(DS1307_I2C_ADDRESS);
   Wire.send(0);
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_I2C_ADDRESS, 7);
 
-  // A few of these need masks because certain bits are control bits
   *second = bcdToDec(Wire.receive() & 0x7f);
   *minute = bcdToDec(Wire.receive());
   *hour = bcdToDec(Wire.receive() & 0x3f); // Need to change this if 12 hour am/pm
@@ -300,12 +277,12 @@ void setup() {
   month = 2;
   year = 11;
   //setDateDs1307(second, minute, hour, dayOfWeek, dayOfMonth, month, year);
+  //##################### UNCOMMENT THE ABOVE TO SET THE DATE & TIME #################################
+  //##################################################################################################
 
   analogWrite(blue, bluemin);
   analogWrite(white, whitemin);
   lcd.begin(20, 4); // set up the LCD's number of rows and columns: 
-  //  lcd.print("12:00 80.6"); // Print a message to the LCD.
-  //  lcd.print(char(223));
   lcd.setCursor(0, 1);
   lcd.print("blue:");
   lcd.print(33*bluemin/85);
@@ -313,6 +290,11 @@ void setup() {
   lcd.print("white:");
   lcd.print(33*whitemin/85);  
 }
+
+
+/*|||||||||||||||||||||||||||||||||||||||||||  D E F I N E  :  T E M P   C O N T R O L ||||||||||||||||||||||||||||||||||||||||||||||*/
+
+
 void temperature() 
 { 
   sensors.requestTemperatures(); // Send the command to get temperatures 
@@ -327,6 +309,7 @@ void temperature()
   if(temp2<toocold) return heaton(),fanoff();
 
 /*
+//the below is for testing as of 8/5/2012...
   if (temp2<(idealtemp+tempswing) && temp2>(idealtemp-tempswing))          //turn off cooler/heater
       {
        digitalWrite(heat, LOW);
@@ -348,6 +331,9 @@ void temperature()
  
 }
 
+
+/*|||||||||||||||||||||||||||||||||||||||||||  D E F I N E  :  T O P - O F F   C O N T R O L ||||||||||||||||||||||||||||||||||||||||||||||*/
+
 void topoff()
 {
   floatstate = digitalRead(floatswitch);
@@ -364,22 +350,9 @@ void loop()
   onesecond();
   relay2();
   relay1();
-            temperature();
-            topoff();
+  temperature();
+  topoff();
 
-
- 
-// TEMP ADDITION $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-/* could POSSIBLY work without all the serial.printing */
-
-
-  
- //FAN CONTROL BELOW ##########################
-
-//#############################################
-
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
   /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L O O P - D I M   F U N C T I O N |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 
@@ -454,8 +427,8 @@ void loop()
         {
           onesecond(); // updates clock once per second
           countdown--;
-                  temperature();
-                  topoff();
+          temperature();
+          topoff();
         }
       } 
     }
@@ -472,7 +445,6 @@ void loop()
         lcd.print(10);
         lcd.print(" ");
       analogWrite(white, 255); 
-      //digitalWrite(ledgrid, HIGH);
       lcd.setCursor(14, 1);
         lcd.print(10);
         lcd.print(" "); 
@@ -512,8 +484,8 @@ void loop()
           countdown--;
           relay2();
           relay1();
-           temperature();
-           topoff();
+          temperature();
+          topoff();
 
         }
 
@@ -542,12 +514,7 @@ void loop()
 
     }
   }
- 
- 
- 
- 
- // Fancontrol for LED Fan
- 
+  
 
 
 }  // END LOOP
