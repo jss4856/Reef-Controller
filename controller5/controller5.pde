@@ -3,10 +3,7 @@
 #define DS1307_I2C_ADDRESS 0x68 //set rtc
 #include <OneWire.h>
 #include <DallasTemperature.h> 
-#define ONE_WIRE_BUS 6 //Define the pin of the DS18B20 
-
-//http://jmsarduino.blogspot.com/2009/05/click-for-press-and-hold-for-b.html
-
+#define ONE_WIRE_BUS 6 //Define the pin of the temp probe
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  T E M P   P I N  |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 OneWire oneWire(ONE_WIRE_BUS); 
@@ -22,6 +19,15 @@ OneWire ds(6);
 const int floatswitch = A3;
 int floatstate = 0;
 const int topoffpump = A1;
+
+int HOLD_DELAY = 5000;
+int sw_state;
+int sw_laststate = LOW;
+int led_state = LOW;
+
+
+
+
 
 // TEMP CONTROL
 int fan = 4;
@@ -289,28 +295,21 @@ void topoff()
   delay (1000);
 }
 
-*/
-void topoff()
-{
-  if (floatstate == LOW) {
-    startPress = 0;
+sw_state = digitalRead(floatswitch);
+
+if (sw_state == HIGH && sw_laststate==LOW){
+  start_hold = millis();
+  allow = true;
   }
-  else {
-    if (startPress==0) {
-      startPress=millis();
-    }
-    else if (millis() - startPress > 7000) {
-      digitalWrite(topoffpump, LOW);
-    }
-    else {digitalWrite(topoffpump,HIGH);
-    } 
-    delay (1000);
+  if (allow == true && sw_state == HIGH && sw_laststate == HIGH){
+  if ((millis() - start_hold) >= HOLD_DELAY){
+  led_state = !led_state; 
+  allow = false;
   }
-  
-}
-
-
-
+  }
+  sw_laststate = sw_state;
+  digitalWrite(topoffpump, led_state);
+  }
 
 /*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  L O O P |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
 void loop()
